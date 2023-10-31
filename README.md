@@ -13,6 +13,13 @@ We are re-writing Alte as NearlyFreeDB. It will not be dependant on any MS APIs 
 ## How it works
 By following lots of Microsoft guidance on Table structure, insights from similar projects, and our own experience developing and using _Alte_ - the following describes the basics of how **NearlyFreeDB** works. Bear in mind that there ARE compromises - but we think the gains are worth it.
 * Table Name
-test
+  * There are a few options for this:
+    * The type-name of the object (e.g. Order) is used as the table name. This is best for larger databases for individual users, rather than multi-tenant applications
+    * The type-name prefixed by a pseudo database name (e.g. Woolworth-Order) - this allows for multiple tenants in one storage account
+    * The pseudo database name (e.g. Woolworth). This would then rely on the PartitionKey (see below) to determine the object type
 * PartitionKey
-test
+  * Normally, the partition key should be used to best distribute the data. However - we will be relying on batch updates (more on this later) so we need the partition keys to be the same for all data within a type, so....
+  * In the event the type-name is set as the table name - or part of it, the partition key is simply "00"
+  * In the event the type-name is NOT part of the table name, the partition key is the type-name e.g. Order
+* The Document Object
+  * 
